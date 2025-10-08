@@ -1,0 +1,10 @@
+echo "Starting verificatin pre-commit process"
+
+if bun lint && bun test; then 
+  echo "Lint & Test passed"
+  exit 0
+else
+    echo "Failure pre-commit process : problems"
+    echo "You can fix the errors with this command : bun lint:fix"
+fi
+
