@@ -13,7 +13,35 @@ export default defineNuxtConfig({
     "@nuxt/test-utils",
     "@nuxt/scripts",
     "@primevue/nuxt-module",
+    "@nuxtjs/i18n",
   ],
+
+  i18n: {
+    strategy: "prefix_and_default",
+
+    locales: [
+      {
+        code: "fr",
+        file: "fr-FR.json",
+        name: "Français",
+      },
+      {
+        code: "en",
+        file: "en-US.json",
+        name: "English",
+      },
+    ],
+
+    defaultLocale: "en",
+
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "i18n_redirected",
+      fallbackLocale: "en",
+    },
+
+    langDir: "locales",
+  },
 
   primevue: {
     autoImport: true,
