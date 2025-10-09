@@ -6,13 +6,14 @@
       "dependencies": {
         "@googlemaps/markerclusterer": "^2.6.2",
         "@nuxt/eslint": "1.9.0",
-        "@nuxt/fonts": "0.11.4",
+        "@nuxt/fonts": "^0.11.4",
         "@nuxt/icon": "2.0.0",
         "@nuxt/image": "1.11.0",
         "@nuxt/scripts": "0.12.1",
         "@nuxt/test-utils": "3.19.2",
         "@primeuix/themes": "^1.2.5",
         "@primevue/nuxt-module": "^4.4.1",
+        "@primevue/themes": "^4.4.1",
         "@unhead/vue": "^2.0.3",
         "eslint": "^9.0.0",
         "nuxt": "^4.1.3",
@@ -415,6 +416,8 @@
     "@primevue/metadata": ["@primevue/metadata@4.4.1", "", {}, "sha512-fvUVYqzF2Us/NNWXyvO2jFZu4mBk/fkquosmxMrWMULzVbjjptiTdvKWWL5AouATi/w/X1LfMg2dwiA/tbbx6g=="],
 
     "@primevue/nuxt-module": ["@primevue/nuxt-module@4.4.1", "", { "dependencies": { "@nuxt/kit": "^3", "@primeuix/styled": "^0.7.4", "@primeuix/utils": "^0.6.1", "@primevue/auto-import-resolver": "4.4.1", "@primevue/forms": "4.4.1", "@primevue/metadata": "4.4.1", "pathe": "^1.1.2", "primevue": "4.4.1", "unplugin-vue-components": "28.4.1" } }, "sha512-x1yLIcYBSHy1NGkJ9ui78NeO7QQV2kapSvDZHBK3G2WpnyAzgeoS3vAMzhyCKA0u4vf3n9KEaL4rol8Dp6LXnw=="],
+
+    "@primevue/themes": ["@primevue/themes@4.4.1", "", { "dependencies": { "@primeuix/styled": "^0.7.4", "@primeuix/themes": "^1.2.5" } }, "sha512-3qofw+UhTG5rZXUU+RtYY1ea5Q84LvfHtDuzFLUSK9pL1SLS+S4CBnoMuVM9I009FdVyNGT0Bib3sLMf21SBVQ=="],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-beta.29", "", {}, "sha512-NIJgOsMjbxAXvoGq/X0gD7VPMQ8j9g0BiDaNjVNVjvl+iKXxL3Jre0v31RmBYeLEmkbj2s02v8vFTbUXi5XS2Q=="],
 

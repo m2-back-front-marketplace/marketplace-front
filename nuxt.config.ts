@@ -22,6 +22,17 @@ export default defineNuxtConfig({
         preset: VegaPreset,
       },
     },
+  },
+
+  fonts: {
+    families: [
+      {
+        name: "Inter",
+        provider: "google",
+        weights: [400, 500, 600, 700],
+      },
+    ],
+  },
 
     eslint: {
       stylistic: {
@@ -29,6 +40,16 @@ export default defineNuxtConfig({
         semi: true,
         quotes: "double",
       },
+    },
+    css: [ "@/assets/css/main.css"],
+
+  app: {
+    head: {
+      title: "VEGARKETPLACE",
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { charset: "utf-8" },
+      ],
     },
   },
 });
