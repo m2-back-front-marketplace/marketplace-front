@@ -41,7 +41,12 @@ export default defineNuxtConfig({
         quotes: "double",
       },
     },
-    css: [ "@/assets/css/main.css"],
+    css: 
+    [ 
+      "primeicons/primeicons.css",
+      "@/assets/css/main.css"
+    ],
+    
 
   app: {
     head: {

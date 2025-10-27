@@ -24,6 +24,10 @@
         </div>
 
         <Button class="button" label="Connexion" />
+        <p class="hint">
+          Vous n'avez pas de compte ?
+          <NuxtLink to="/auth/register">S’inscrire</NuxtLink>
+        </p>
       </div>
     </div>
   </div>
@@ -45,61 +49,79 @@ const password = ref('')
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.05);
-  padding: 2rem; /* Adjusted padding for better responsiveness */
+  padding: 3rem;
 }
 
 .form-card {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  width: 90%; /* Use percentage for better responsiveness */
-  max-width: 400px;
+  background-color: #fff;
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 }
 
 .form-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
   text-align: center;
+  color: #1f2937;
 }
 
 .input-group {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.input-group label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+:deep(.p-inputtext) {
+  font-size: 1rem;
+  padding: 0.9rem 1rem;
 }
 
 .button {
   margin-top: 1rem;
-  color: white;
-  background-color: #007bff;
-  width: 100%; /* Make the button take full width */
+  color: #fff;
+  background-color: #2f55d4;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+.button:hover {
+  background-color: #2443b7;
 }
 
-/* Add media queries for responsiveness */
-@media (max-width: 768px) {
-  .form-card {
-    padding: 1.5rem; /* Reduce padding on smaller screens */
-  }
-
-  .form-title {
-    font-size: 1.2rem; /* Adjust font size for smaller screens */
-  }
+.hint {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #6b7280;
 }
 
+/* Responsive  */
 @media (max-width: 480px) {
   .form-card {
-    padding: 1rem; /* Further reduce padding for very small screens */
+    padding: 2rem 1.5rem;
+    max-width: 90%;
   }
-
   .form-title {
-    font-size: 1rem; /* Further adjust font size */
+    font-size: 1.6rem;
   }
-
   .button {
-    font-size: 0.9rem; /* Adjust button font size */
+    font-size: 1rem;
   }
 }
 </style>
