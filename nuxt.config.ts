@@ -62,15 +62,6 @@ export default defineNuxtConfig({
     ],
   },
 
-    eslint: {
-      stylistic: {
-        indent: 2,
-        semi: true,
-        quotes: "double",
-      },
-    },
-    css: [ "@/assets/css/main.css"],
-
   app: {
     head: {
       title: "VEGARKETPLACE",
