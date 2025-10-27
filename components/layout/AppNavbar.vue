@@ -4,12 +4,12 @@
         
         <template #start>
   <div class="flex items-center gap-2">
-    <img :src="logo" alt="EGARKETPLACE" class="h-10 w-auto" />
+    <img :src="logo" alt="EGARKETPLACE" class="h-10 w-auto" >
   </div>
 </template>
         <template #item="{ item, props, hasSubmenu, root }">
           <a v-ripple class="flex items-center gap-2 px-3 py-2" v-bind="props.action">
-            <i v-if="item.icon" :class="[item.icon, 'text-primary']"></i>
+            <i v-if="item.icon" :class="[item.icon, 'text-primary']"/>
             <span class="font-medium">{{ item.label }}</span>
   
             <Badge v-if="item.badge" :class="{ 'ml-auto': !root, 'ml-2': root }" :value="item.badge" />
@@ -24,7 +24,7 @@
                 'pi pi-angle-down ml-auto',
                 { 'pi-angle-down': root, 'pi-angle-right': !root }
               ]"
-            ></i>
+            />
           </a>
         </template>
 
