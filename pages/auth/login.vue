@@ -33,15 +33,13 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
 import AppNavbar from '~/components/layout/AppNavbar.vue'
-
-const email = ref('')
-const password = ref('')
+import LoginForm from '~/components/auth/LoginForm/index.vue'
 </script>
 
 <style scoped>
+<<<<<<< HEAD
 .page-wrapper {
   height: 100vh;
   display: flex;
@@ -123,5 +121,14 @@ const password = ref('')
   .button {
     font-size: 1rem;
   }
+=======
+.page-wrapper{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.05);
+  padding:3rem;
+>>>>>>> 931bd16 (refacto login)
 }
 </style>
