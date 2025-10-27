@@ -15,7 +15,7 @@
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.6.2",
     "@nuxt/eslint": "1.9.0",
-    "@nuxt/fonts": "0.11.4",
+    "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "2.0.0",
     "@nuxt/image": "1.11.0",
     "@nuxt/scripts": "0.12.1",
@@ -23,6 +23,7 @@
     "@nuxtjs/i18n": "10.1.0",
     "@primeuix/themes": "^1.2.5",
     "@primevue/nuxt-module": "^4.4.1",
+    "@primevue/themes": "^4.4.1",
     "@unhead/vue": "^2.0.3",
     "eslint": "^9.0.0",
     "nuxt": "^4.1.3",
