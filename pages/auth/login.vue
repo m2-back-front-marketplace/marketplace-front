@@ -2,6 +2,7 @@
   <div>
     <AppNavbar />
     <div class="page-wrapper">
+<<<<<<< HEAD
       <div class="form-card">
         <h2 class="form-title">Connexion</h2>
 
@@ -29,6 +30,9 @@
           <NuxtLink to="/auth/register">S’inscrire</NuxtLink>
         </p>
       </div>
+=======
+      <LoginForm />
+>>>>>>> 91bad2f (refacto login)
     </div>
   </div>
 </template>
