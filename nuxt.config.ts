@@ -16,6 +16,15 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
   ],
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.API_BASE || "http://localhost:8000",
+      enableMockAuth: false,
+      mockLatencyMs: 0,
+      loginRedirect: "/sandbox",
+    },
+  },
+
   i18n: {
     strategy: "prefix_and_default",
 
