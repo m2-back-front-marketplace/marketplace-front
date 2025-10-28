@@ -5,7 +5,6 @@ import process from 'node:process';
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  css: ["primeicons/primeicons.css"],
 
   modules: [
     "@nuxt/eslint",
@@ -53,6 +52,7 @@ export default defineNuxtConfig({
   primevue: {
     autoImport: true,
     options: {
+      ripple: true,
       theme: {
         preset: VegaPreset,
       },

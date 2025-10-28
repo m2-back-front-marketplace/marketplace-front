@@ -14,7 +14,11 @@ import RegisterForm from '~/components/auth/RegisterForm/index.vue'
 
 <style scoped>
 .page-wrapper{
-  min-height:100vh; display:flex; align-items:center; justify-content:center;
-  background:rgba(0,0,0,.05); padding:3rem;
+  min-height:100vh; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center;
+  background:rgba(0,0,0,.05); 
+  padding: 6rem 1rem 3rem;
 }
 </style>
