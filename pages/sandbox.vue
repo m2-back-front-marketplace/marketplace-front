@@ -1,6 +1,10 @@
 <template>
     <div class="sandbox-page">
       <h1>Sandbox — Test Composants</h1>
+      <section>
+        <h2>Banner Component</h2>
+        <Banner />
+      </section>
 
       <section>
         <h2>CategoryCard</h2>
@@ -21,6 +25,8 @@
           <ProductCard title="Casque sans fil" :price="99.99" />
           <ProductCard title="Fauteuil moderne" :price="249.99" />
           <ProductCard title="Lampe design" :price="49.9" />
+          <ProductCard title="Montre connectée" :price="199.99" />
+          <ProductCard title="Ordinateur portable" :price="899.99" />
         </div>
       </section>
   
@@ -35,6 +41,7 @@
   </template>
   
   <script setup lang="ts">
+    import Banner from '~/components/Banner.vue'
     import ProductCard from '~/components/ProductCard.vue'
     import CategoryCard from '~/components/CategoryCard.vue'
 
