@@ -21,12 +21,15 @@
   import { defineProps } from 'vue'
   import Card from 'primevue/card'
   
-  const props = defineProps<{
-    title: string
-    price: number
-  }>()
+  const _props = withDefaults(defineProps<{
+    title?: string
+    price?: number
+  }>(), {
+      title: 'Produit sans titre',
+      price: 0,
+    })
+
   
-  // 💶 Formatte proprement le prix en euros (ex: 99.99 → 99,99 €)
   const formatPrice = (value: number) => {
     if (isNaN(value)) return ''
     return new Intl.NumberFormat('fr-FR', {
@@ -42,6 +45,9 @@
     border-radius: 12px;
     overflow: hidden;
     background-color: #fff;
+  }
+  .product-card:hover {
+    transform: scale(1.03);
   }
   
   /* Zone rouge provisoire pour l'image */
