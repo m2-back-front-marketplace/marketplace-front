@@ -9,6 +9,9 @@ type RegisterPayload = ProRegisterPayload | PartRegisterPayload
 type User = { id: number; email: string; name: string }
 type AuthResponse = { token: string; user: User }
 
+const isProPayload = (p: RegisterPayload): p is ProRegisterPayload =>
+  p.type === 'pro'
+
 export const useAuth = () => {
   const router = useRouter()
   const {
@@ -40,27 +43,111 @@ export const useAuth = () => {
     }
   }
 
-  const realLogin = async (payload: LoginPayload): Promise<AuthResponse> => {
-    // On n’appelle pas réellement tant que l’API n’est pas dispo.
-    // Laisse le code prêt pour le jour J.
-    return await $fetch<AuthResponse>(`${apiBase}/auth/login`, {
+  const mockRegister = async (payload: RegisterPayload): Promise<AuthResponse> => {
+    await new Promise(r => setTimeout(r, Number(mockLatencyMs) || 0))
+
+    if (isProPayload(payload)) {
+      return {
+        token: 'mock-token-register-pro',
+        user: {
+          id: 2,
+          email: payload.email,
+          name: payload.company || 'Pro démo'
+        }
+      }
+    }
+
+    return {
+      token: 'mock-token-register-part',
+      user: {
+        id: 3,
+        email: payload.email,
+        name: `${payload.firstname} ${payload.fullname}`.trim() || 'Particulier démo'
+      }
+    }
+  }
+
+  const realLogin = async (payload: LoginPayload): Promise<any> => {
+    return await $fetch(`${apiBase}/user/login`, {
       method: 'POST',
       body: payload
     })
   }
 
+  const realRegister = async (payload: RegisterPayload): Promise<AuthResponse> => {
+    if (isProPayload(payload)) {
+      // PRO -> /user/registerSeller
+      await $fetch(`${apiBase}/user/registerSeller`, {
+        method: 'POST',
+        body: {
+          username: payload.company,
+          email: payload.email,
+          password: payload.password,
+          tax_id: payload.vat ?? undefined
+        }
+      })
+  
+      // login après création
+      return await realLogin({ email: payload.email, password: payload.password })
+    }
+  
+    // PARTICULIER -> /user/registerClient
+    await $fetch(`${apiBase}/user/registerClient`, {
+      method: 'POST',
+      body: {
+        username: `${payload.firstname} ${payload.fullname}`.trim(),
+        email: payload.email,
+        password: payload.password
+      }
+    })
+  
+    return await realLogin({ email: payload.email, password: payload.password })
+  }
+  
+
+
   const login = async (payload: LoginPayload): Promise<void> => {
     loading.value = true
     error.value = null
+  
     try {
       const res = (enableMockAuth || apiBase === 'mock')
         ? await mockLogin(payload)
         : await realLogin(payload)
-
-      token.value = res.token
-      user.value = res.user
+  
+      if (process.dev) {
+        console.log('[AUTH] login response =', res)
+      }
+  
+      // Si le back renvoie un token dans un champ classique
+      const tokenFromBody =
+        (res && (res.token || res.accessToken || res.jwt || res.data?.token)) ?? null
+  
+      // Si le back renvoie un user
+      const userFromBody =
+        (res && (res.user || res.data?.user)) ?? null
+  
+      // 1️⃣ Si pas d'erreur HTTP, on considère que le login est OK.
+      //    -> soit on a un token, soit on utilise un flag "session".
+      token.value = tokenFromBody || 'session'
+  
+      // 2️⃣ On met quand même quelque chose dans user pour l'UI
+      if (userFromBody) {
+        user.value = userFromBody
+      } else {
+        user.value = {
+          id: 0,
+          email: payload.email,
+          name: payload.email.split('@')[0]
+        }
+      }
+  
       await router.push(String(loginRedirect || '/'))
     } catch (e: unknown) {
+      if (process.dev) {
+        console.error('[AUTH] login error =', e)
+      }
+  
       const message =
         (e as { data?: { message?: string }; message?: string })?.data?.message ??
         (e as { message?: string })?.message ??
@@ -70,6 +157,7 @@ export const useAuth = () => {
       loading.value = false
     }
   }
+  
 
   const register = async (payload: RegisterPayload): Promise<void> => {
     loading.value = true
