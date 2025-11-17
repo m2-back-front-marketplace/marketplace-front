@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import VegaPreset from "./presets/VegaPreset";
+import process from 'node:process';
 
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -16,14 +17,10 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
   ],
 
-  runtimeConfig: {
-    public: {
-      apiBase: process.env.API_BASE || "http://localhost:8000",
-      enableMockAuth: false,
-      mockLatencyMs: 0,
-      loginRedirect: "/sandbox",
-    },
-  },
+  css: [
+    'primeicons/primeicons.css',
+    '@/assets/css/main.css'
+  ],
 
   i18n: {
     strategy: "prefix_and_default",
@@ -55,6 +52,7 @@ export default defineNuxtConfig({
   primevue: {
     autoImport: true,
     options: {
+      ripple: true,
       theme: {
         preset: VegaPreset,
       },
@@ -80,4 +78,13 @@ export default defineNuxtConfig({
       ],
     },
   },
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'mock',
+      enableMockAuth: (process.env.NUXT_PUBLIC_MOCK_AUTH ?? '1') !== '0',
+      mockLatencyMs: Number(process.env.NUXT_PUBLIC_MOCK_LATENCY_MS ?? 400),
+      loginRedirect: process.env.NUXT_PUBLIC_LOGIN_REDIRECT ?? '/sandbox',
+      autoLoginAfterRegister: (process.env.NUXT_PUBLIC_AUTO_LOGIN_AFTER_REGISTER ?? '1') !== '0',
+    }
+  }
 });

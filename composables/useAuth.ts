@@ -2,12 +2,23 @@
 import { useRouter, useRuntimeConfig } from '#imports'
 
 type LoginPayload = { email: string; password: string }
-type User = { id: number; email: string; username: string }
+type ProRegisterPayload = { type: 'pro'; company: string; email: string; password: string; siret: number | null; vat: number | null }
+type PartRegisterPayload = { type: 'part'; fullname: string; firstname: string; email: string; password: string }
+type RegisterPayload = ProRegisterPayload | PartRegisterPayload
+
+type User = { id: number; email: string; name: string }
+type AuthResponse = { token: string; user: User }
 
 export const useAuth = () => {
   const router = useRouter()
   const {
-    public: { loginRedirect = '/sandbox', enableMockAuth = false },
+    public: {
+      apiBase = 'mock',          
+      enableMockAuth = true,     
+      mockLatencyMs = 400,      
+      loginRedirect = '/sandbox',
+      autoLoginAfterRegister = true 
+    }
   } = useRuntimeConfig()
   const { $api } = useApi()
 
@@ -47,13 +58,35 @@ export const useAuth = () => {
     }
   }
 
-  const logout = async () => {
+  const register = async (payload: RegisterPayload): Promise<void> => {
+    loading.value = true
+    error.value = null
     try {
-      await $api('/logout', { method: 'POST' })
-    } catch {}
+      const res = (enableMockAuth || apiBase === 'mock') ? await mockRegister(payload) : await realRegister(payload)
+
+      if (autoLoginAfterRegister) {
+        token.value = res.token
+        user.value = res.user
+        await router.push(String(loginRedirect || '/'))
+      } else {
+        await router.push('/auth/login')
+      }
+    } catch (e: unknown) {
+      const message =
+        (e as { data?: { message?: string }; message?: string })?.data?.message ??
+        (e as { message?: string })?.message ?? 'Inscription impossible'
+      error.value = message
+    } finally {
+      loading.value = false
+    }
+  }
+
+
+  const logout = async (): Promise<void> => {
+    token.value = null
     user.value = null
     await router.push('/auth/login')
   }
 
-  return { user, isLoggedIn, loading, error, login, logout }
+  return { token, user, isLoggedIn, loading, error, login, register, logout }
 }
