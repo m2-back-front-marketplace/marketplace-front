@@ -42,7 +42,7 @@
   
   <script setup lang="ts">
     import Banner from '~/components/Banner.vue'
-    import ProductCard from '~/components/ProductCard.vue'
+    import ProductCard from '~/components/layout/ProductCard/index.vue'
     import CategoryCard from '~/components/CategoryCard.vue'
 
     const categories = [
