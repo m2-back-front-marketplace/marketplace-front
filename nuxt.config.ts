@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@primevue/nuxt-module",
     "@nuxtjs/i18n",
+    "@pinia/nuxt"
   ],
 
   css: [

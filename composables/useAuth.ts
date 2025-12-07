@@ -1,4 +1,5 @@
 import { useApiPost } from "~/services/api";
+import { useUserStore } from '~/stores/useUserStore'
 
 interface LoginInterface {
   email: string;
@@ -17,6 +18,8 @@ interface RegisterInterface {
   image?: string;
 }
 
+const userStore = useUserStore();
+
 export const useAuth = () => {
   async function login(body: LoginInterface) {
     try {
@@ -24,7 +27,8 @@ export const useAuth = () => {
         email: body.email,
         password: body.password,
       });
-      return res.data;
+      userStore.user = res.data.value;
+      return res.data.value;
     } catch (error) {
       console.error("error while trying to login in", error);
     }
