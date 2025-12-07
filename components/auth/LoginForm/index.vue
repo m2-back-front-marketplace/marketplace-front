@@ -48,6 +48,7 @@ const password = ref("");
 const onSubmit = async () => {
   if (!email.value || !password.value) return;
   await login({ email: email.value.trim(), password: password.value });
+  await navigateTo("/home");
 };
 </script>
 
