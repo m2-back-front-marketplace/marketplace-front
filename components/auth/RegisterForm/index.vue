@@ -145,9 +145,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useAuth } from "~/composables/useAuth";
-import { useToast } from "primevue/usetoast";
-
-const toast = useToast();
 
 type UserType = "pro" | "part";
 interface ProForm {
@@ -206,12 +203,7 @@ const onSubmit = async () => {
     return;
 
   await register(payload as any); // typé dans useAuth
-  toast.add({
-    severity: "success",
-    summary: "Compte Crée",
-    detail: "Vous pouvez désormais vous connectez",
-    life: 3000,
-  });
+  await navigateTo("/auth/login")
 };
 </script>
 
