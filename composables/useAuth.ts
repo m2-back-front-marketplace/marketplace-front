@@ -18,9 +18,9 @@ interface RegisterInterface {
   image?: string;
 }
 
-const userStore = useUserStore();
 
 export const useAuth = () => {
+  const userStore = useUserStore();
   async function login(body: LoginInterface) {
     try {
       const res = await useApiPost("/user/login", {
