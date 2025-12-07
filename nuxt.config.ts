@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@primevue/nuxt-module",
     "@nuxtjs/i18n",
+    "@pinia/nuxt"
   ],
 
   css: [
@@ -80,7 +81,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'mock',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE,
       enableMockAuth: (process.env.NUXT_PUBLIC_MOCK_AUTH ?? '1') !== '0',
       mockLatencyMs: Number(process.env.NUXT_PUBLIC_MOCK_LATENCY_MS ?? 400),
       loginRedirect: process.env.NUXT_PUBLIC_LOGIN_REDIRECT ?? '/sandbox',
