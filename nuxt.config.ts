@@ -55,6 +55,9 @@ export default defineNuxtConfig({
       ripple: true,
       theme: {
         preset: VegaPreset,
+        options: {
+          darkModeSelector: false,
+        },
       },
     },
   },
