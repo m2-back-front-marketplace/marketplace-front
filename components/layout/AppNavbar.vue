@@ -49,7 +49,7 @@
     const { categories } = useCategories()
     
     const items = computed(() => [
-      { label: 'Accueil', icon: 'pi pi-home', to: '/' },
+      { label: 'Accueil', to: '/' },
     
       {
         label: 'Catégories',
@@ -62,7 +62,7 @@
     
       { label: 'Promotions', to: '/promotions' },
       { label: 'Best Seller', to: '/best-sellers' },
-      { label: 'Panier', icon: 'pi pi-shopping-cart', to: '/panier' }
+      { icon: 'pi pi-shopping-cart', to: '/panier' }
     ])
     </script>
     
