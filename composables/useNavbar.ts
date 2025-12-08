@@ -1,5 +1,7 @@
+import { useApiGet } from '@/services/api';
+
 export const useCategories = () => {
-    const { data, pending, error } = useFetch('http://localhost:8000/category') 
+    const { data, pending, error } = useApiGet('http://localhost:8000/category') 
   
     return {
       categories: data,
