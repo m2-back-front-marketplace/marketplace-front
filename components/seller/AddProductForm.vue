@@ -54,10 +54,10 @@
 
     <div class="input-group">
       <label class="input-label">Catégorie</label>
-      <Dropdown
+      <Select
         v-model="product.category"
         :options="categoryOptions"
-        option-label="name"
+        option-label="label"
         option-value="value"
         placeholder="Sélectionner une catégorie"
         class="w-full"
@@ -105,16 +105,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useCategoryStore } from '~/stores/useCategoryStore';
 import { useClientPostFormData } from '~/services/api';
+import { storeToRefs } from 'pinia';
 
 const product = ref({
   name: '',
   description: '',
   quantity: 0,
   price: 0,
-  category: [],
+  category: null,
 });
 
 const categoryStore = useCategoryStore();
@@ -123,6 +124,12 @@ const error = ref('');
 const success = ref('');
 const selectedFileName = ref('');
 const fileInput = ref();
+const categoryOptions = computed(() => {
+  return categoryStore.categories.map(cat => ({
+    label: cat.name,
+    value: cat.id
+  }));
+});
 
 const handleFileChange = (event) => {
   const file = event.target.files?.[0];
@@ -137,18 +144,15 @@ const onSubmit = async () => {
   await useClientPostFormData('/productCreate', product);
 };
 
-onMounted( async () => {
+onMounted(async () => {
   try {
-    console.log("categoryStore.categories.length")
     if(categoryStore.categories.length <= 0) {
       await categoryStore.loadCategoryList();
-      console.log("categoryStore Result API", categoryStore.categories);
-      product.value.category = categoryStore.categories;
     }
   } catch(error) {
-    console.error("Error while tring to mount the categories of the component AddProductForm", error)
+    console.error("Error while trying to mount the categories of the component AddProductForm", error)
   }
-})
+});
 
 </script>
 

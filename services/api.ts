@@ -206,6 +206,28 @@ export const useClientPostFormData = async <T = unknown>(
   }
 };
 
+export const useClientGet = async <T = unknown>(
+  url: string,
+) => {
+  const { baseURL } = useApiConfig();
+  const { token } = useAuthToken();
+
+  try {
+    const data = await $fetch<T>(url, {
+      baseURL,
+      method: "GET",
+      credentials: "include",
+      headers: {
+        ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
+      },
+    });
+    return { data, error: null };
+  } catch (error: any) {
+    await handleClientError(error);
+    return { data: null, error };
+  }
+};
+
 // ===== FONCTIONS LEGACY (pour compatibilité) =====
 
 export const useApiPost = <T = unknown>(
