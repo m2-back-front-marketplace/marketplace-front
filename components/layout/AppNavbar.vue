@@ -42,30 +42,32 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue'
-  import logo from '~/assets/img/Logo-complet.svg'
-  
-  const items = ref([
-    { label: 'Accueil', icon: 'pi pi-home' },
-    {
-      label: 'Catégories',
-      items: [
-        { label: 'Électroniques', icon: 'pi pi-desktop' },
-        { label: 'Mode & Beauté', icon: 'pi pi-user' },
-        { label: 'Maison & Jardin', icon: 'pi pi-home' },
-        { label: 'Sport', icon: 'pi pi-cog' },
-        { label: 'Jouets', icon: 'pi pi-bookmark' }
-      ]
-    },
-    { label: 'Promotions' },
-    { label: 'Best Seller' },
-    { label: 'Panier' }
-  ])
-  </script>
-  
-  <style scoped>
-  .card {
-    border-radius: 0;
-  }
-  </style>
-  
+    import { computed } from 'vue'
+    import logo from '~/assets/img/Logo-complet.svg'
+    import { useCategories } from '~/composables/useNavbar'
+    
+    const { categories } = useCategories()
+    
+    const items = computed(() => [
+      { label: 'Accueil', to: '/' },
+    
+      {
+        label: 'Catégories',
+        items: (categories.value ?? []).map((cat) => ({
+          label: cat.name,
+          icon: 'pi pi-tag',
+          to: `/categorie/${cat.id}`
+        }))
+      },
+    
+      { label: 'Promotions', to: '/promotions' },
+      { label: 'Best Seller', to: '/best-sellers' },
+      { icon: 'pi pi-shopping-cart', to: '/panier' }
+    ])
+    </script>
+    
+    <style scoped>
+    .card {
+      border-radius: 0;
+    }
+    </style>
