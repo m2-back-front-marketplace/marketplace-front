@@ -74,6 +74,7 @@
           @change="handleFileChange"
           class="file-input"
           id="file-upload"
+          v-model="product.file"
         />
         <label for="file-upload" class="file-label">
           <i class="pi pi-upload"></i>
@@ -116,6 +117,7 @@ const product = ref({
   quantity: 0,
   price: 0,
   category: null,
+  file: null
 });
 
 const categoryStore = useCategoryStore();
