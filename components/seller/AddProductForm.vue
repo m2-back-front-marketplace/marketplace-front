@@ -106,29 +106,23 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useCategoryStore } from '~/stores/useCategoryStore';
+import { useClientPostFormData } from '~/services/api';
 
 const product = ref({
   name: '',
   description: '',
   quantity: 0,
   price: 0,
-  category: ''
+  category: [],
 });
 
+const categoryStore = useCategoryStore();
 const loading = ref(false);
 const error = ref('');
 const success = ref('');
 const selectedFileName = ref('');
 const fileInput = ref();
-
-const categoryOptions = ref([
-  { name: 'Fruits', value: 'fruits' },
-  { name: 'Légumes', value: 'vegetables' },
-  { name: 'Herbes aromatiques', value: 'herbs' },
-  { name: 'Céréales', value: 'cereals' },
-  { name: 'Légumineuses', value: 'legumes' },
-  { name: 'Autres', value: 'others' }
-]);
 
 const handleFileChange = (event) => {
   const file = event.target.files?.[0];
@@ -139,13 +133,23 @@ const handleFileChange = (event) => {
   }
 };
 
-const resetForm = () => {
-  // Tu peux ajouter ta logique ici
+const onSubmit = async () => {
+  await useClientPostFormData('/productCreate', product);
 };
 
-const onSubmit = () => {
-  // Tu peux ajouter ta logique ici
-};
+onMounted( async () => {
+  try {
+    console.log("categoryStore.categories.length")
+    if(categoryStore.categories.length <= 0) {
+      await categoryStore.loadCategoryList();
+      console.log("categoryStore Result API", categoryStore.categories);
+      product.value.category = categoryStore.categories;
+    }
+  } catch(error) {
+    console.error("Error while tring to mount the categories of the component AddProductForm", error)
+  }
+})
+
 </script>
 
 <style scoped src="../auth/LoginForm/style.css">

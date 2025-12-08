@@ -1,7 +1,7 @@
 <template>
     <div class="card shadow-sm border-b border-gray-200">
       <Menubar :model="items" class="!justify-between px-6">
-        
+
         <template #start>
   <div class="flex items-center gap-2">
     <img :src="logo" alt="EGARKETPLACE" class="h-10 w-auto" >
@@ -11,7 +11,6 @@
           <a v-ripple class="flex items-center gap-2 px-3 py-2" v-bind="props.action">
             <i v-if="item.icon" :class="[item.icon, 'text-primary']"/>
             <span class="font-medium">{{ item.label }}</span>
-  
             <Badge v-if="item.badge" :class="{ 'ml-auto': !root, 'ml-2': root }" :value="item.badge" />
             <span
               v-if="item.shortcut"
@@ -40,17 +39,17 @@
       </Menubar>
     </div>
   </template>
-  
+
   <script setup>
     import { computed } from 'vue'
     import logo from '~/assets/img/Logo-complet.svg'
-    import { useCategories } from '~/composables/useNavbar'
-    
-    const { categories } = useCategories()
-    
+    import { useNavbar } from '~/composables/useNavbar'
+
+    const { categories } = useNavbar()
+
     const items = computed(() => [
       { label: 'Accueil', to: '/' },
-    
+
       {
         label: 'Catégories',
         items: (categories.value ?? []).map((cat) => ({
@@ -59,13 +58,13 @@
           to: `/categorie/${cat.id}`
         }))
       },
-    
+
       { label: 'Promotions', to: '/promotions' },
       { label: 'Best Seller', to: '/best-sellers' },
       { icon: 'pi pi-shopping-cart', to: '/panier' }
     ])
     </script>
-    
+
     <style scoped>
     .card {
       border-radius: 0;
