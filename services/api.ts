@@ -48,7 +48,7 @@ export const useApi = <T = unknown>(
 
   const defaults: UseFetchOptions<T> = {
     baseURL,
-
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(token.value ? { Authorization: `Bearer ${token.value}` } : {}),
@@ -71,6 +71,7 @@ export const useApi = <T = unknown>(
   return useFetch<T>(url, {
     ...defaults,
     ...options,
+    credentials: "include",
     headers: {
       ...defaults.headers,
       ...options?.headers,
