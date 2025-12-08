@@ -45,6 +45,10 @@ import Banner from "~/components/Banner.vue";
 import ProductCard from "~/components/ProductCard.vue";
 import CategoryCard from "~/components/CategoryCard.vue";
 
+definePageMeta({
+    middleware: ["auth"],
+});
+
 const categories = [
     {
         title: "Mode et vêtements",
