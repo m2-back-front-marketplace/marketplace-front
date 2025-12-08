@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import AppNavbar from '~/components/layout/AppNavbar.vue'
+import AppNavbar from '~/components/layout/AppNavbar/index.vue'
 import RegisterForm from '~/components/auth/RegisterForm/index.vue'
 </script>
 

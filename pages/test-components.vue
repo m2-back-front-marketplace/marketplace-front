@@ -5,6 +5,6 @@
 </template>
 
 <script setup>
-    import AppNavbar from '~/components/layout/AppNavbar.vue'
+    import AppNavbar from '~/components/layout/AppNavbar/index.vue'
     
 </script>

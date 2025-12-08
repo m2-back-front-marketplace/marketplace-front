@@ -1,0 +1,21 @@
+.logo-desktop {
+    display: block;
+    height: 40px;
+  }
+  
+  .logo-mobile {
+    display: none;
+    height: 30px;
+  }
+  
+  /* Responsive : à partir de 768px, on affiche le grand logo */
+  @media (max-width: 767px) {
+    .logo-desktop {
+      display: none;
+    }
+  
+    .logo-mobile {
+      display: block;
+    }
+  }
+  
