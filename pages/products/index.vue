@@ -39,6 +39,9 @@
 
 <script setup>
 import AppNavbar from "~/components/layout/AppNavbar.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 // Configuration de l'API
 const config = useRuntimeConfig();
 const baseURL = config.public.apiBase || "http://localhost:8000/api";
@@ -56,6 +59,7 @@ const { data, error, pending, refresh } = await useFetch(
 
 // Gestion des événements
 const handleProductClick = (product) => {
+    router.push(`/product/${product.id}`);
     console.log("Produit cliqué:", product.name);
 };
 
