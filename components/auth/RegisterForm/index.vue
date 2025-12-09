@@ -1,7 +1,6 @@
 <template>
   <form class="form-card" @submit.prevent="onSubmit">
     <h2 class="form-title">Vous Êtes ?</h2>
-    <!-- Toggle -->
     <div class="segmented">
       <button
         type="button"

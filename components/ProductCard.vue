@@ -65,8 +65,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import Card from "primevue/card";
-
 import { useProducts } from "~/composables/useProducts";
+import { useCartStore } from "~/stores/useCartStore";
 
 interface Product {
     id: number;
@@ -74,7 +74,7 @@ interface Product {
     description: string;
     price: number;
     quantity: number;
-    images?: string[{ id: number; url: string }];
+    images?: Array<{ id?: number; url?: string }> | string[];
     seller_id: number;
     discount_id?: number;
     category_id: number;
@@ -97,6 +97,8 @@ const emit = defineEmits<{
 }>();
 
 const { formatPrice } = useProducts();
+
+const cartStore = useCartStore();
 
 const addingToCart = ref(false);
 const imageError = ref(false);
@@ -131,14 +133,79 @@ const handleProductClick = () => {
 
 const addToCart = async () => {
     if (props.product.quantity <= 0) return;
-
+    if (addingToCart.value) return;
     addingToCart.value = true;
+
+    const snapshot = {
+        id: props.product.id,
+        name: props.product.name,
+        price: props.product.price,
+        images: props.product.images,
+    };
+
+    // helper fallback: write to localStorage if cart store is unavailable or fails
+    const LOCAL_KEY = "varketplace_cart_v1";
+    const fallbackAddToLocal = (prodSnapshot: any, qty = 1) => {
+        try {
+            const raw = localStorage.getItem(LOCAL_KEY);
+            const parsed = raw ? JSON.parse(raw) : { items: [] };
+            if (!parsed || !Array.isArray(parsed.items)) parsed.items = [];
+            const items = parsed.items;
+            const existing = items.find(
+                (it: any) => it.productId === prodSnapshot.id,
+            );
+            if (existing) {
+                existing.quantity = (existing.quantity ?? 0) + qty;
+            } else {
+                items.push({
+                    productId: prodSnapshot.id,
+                    quantity: qty,
+                    product: prodSnapshot,
+                });
+            }
+            localStorage.setItem(LOCAL_KEY, JSON.stringify({ items }));
+            return { ok: true, data: { items } };
+        } catch (e) {
+            console.error("fallbackAddToLocal error:", e);
+            return { ok: false, error: e };
+        }
+    };
+
     try {
-        emit("addToCart", props.product, 1);
-        // Ici tu peux ajouter la logique d'ajout au panier
-        console.log("Ajout au panier:", props.product.name);
-    } catch (error) {
-        console.error("Erreur lors de l'ajout au panier:", error);
+        // prefer store if available
+        if (cartStore && typeof cartStore.addToCart === "function") {
+            const res = await cartStore.addToCart(snapshot, 1);
+            // if store returned an error object, fallback to local to avoid crash
+            if (res && (res as any).error) {
+                console.warn(
+                    "Cart store reported error, falling back to local:",
+                    (res as any).error,
+                );
+                fallbackAddToLocal(snapshot, 1);
+                emit("addToCart", props.product, 1);
+                emit("add-to-cart", props.product, 1);
+            } else {
+                // success path
+                emit("addToCart", props.product, 1);
+                emit("add-to-cart", props.product, 1);
+            }
+        } else {
+            // no store available -> local fallback
+            fallbackAddToLocal(snapshot, 1);
+            emit("addToCart", props.product, 1);
+            emit("add-to-cart", props.product, 1);
+        }
+    } catch (err) {
+        // Defensive: if store code throws (eg. cart.value was null), fallback to localStorage
+        console.error("Erreur lors de l'ajout au panier:", err);
+        try {
+            fallbackAddToLocal(snapshot, 1);
+            emit("addToCart", props.product, 1);
+            emit("add-to-cart", props.product, 1);
+        } catch (e) {
+            console.error("Fallback also failed:", e);
+        }
+        // Do not rethrow to avoid breaking the UI
     } finally {
         addingToCart.value = false;
     }
