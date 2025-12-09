@@ -1,4 +1,5 @@
 <template>
+  <AppNavbar />
     <div class="product-detail-page">
       <ProductDetail />
     </div>
@@ -6,6 +7,10 @@
   
 <script setup>
 import ProductDetail from '@/components/ProductDetail/index.vue'
+import AppNavbar from '@/components/layout/AppNavbar.vue'
+const route = useRoute()
+const { product, pending, error } = useProduct(route.params.id)
+
 </script>
   
 <style scoped>

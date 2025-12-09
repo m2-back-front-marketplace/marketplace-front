@@ -1,14 +1,14 @@
-import { useApiGet } from '@/services/api'
 import { useProductStore } from '@/stores/useProductStore'
 
 export const useProduct = (id: number | string) => {
   const productStore = useProductStore()
-  const { data, pending, error } = useApiGet(`http://localhost:8000/product/${id}`)
-
-  watchEffect(() => {
-    console.log('[DEBUG] Fetched product:', data.value)
+  
+  const { data, error, pending } = useFetch(`/product/getProductById/${id}`, {
+    baseURL: 'http://localhost:8000',
+    key: `product-${id}`,
+    transform: (response) => response?.data || null,
+    default: () => null,
   })
-  productStore.product = data.value
 
 
   return {
