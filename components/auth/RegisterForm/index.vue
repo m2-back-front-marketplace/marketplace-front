@@ -41,7 +41,7 @@
                     <InputGroupAddon
                         ><i class="pi pi-briefcase"></i
                     ></InputGroupAddon>
-                    <InputText v-model="pro.Username" placeholder="Username" />
+                    <InputText v-model="pro.username" placeholder="Username" />
                 </InputGroup>
             </div>
 
@@ -87,7 +87,7 @@
             </div>
 
             <div class="input-group">
-                <label>Numéro de TVA</label>
+                <label>Numéro de TVA (optionnel)</label>
                 <InputGroup>
                     <InputGroupAddon
                         ><i class="pi pi-percentage"></i
@@ -179,11 +179,18 @@
 
         <Button
             class="button"
-            :label="loading ? 'S’inscrire…' : 'S’inscrire'"
+            :label="
+                loading
+                    ? userType === 'pro'
+                        ? 'S’inscrire en tant que pro…'
+                        : 'S’inscrire…'
+                    : 'S’inscrire'
+            "
             :disabled="loading"
             type="submit"
         />
-        <p v-if="error" class="error">{{ error }}</p>
+        <p v-if="localError" class="error">{{ localError }}</p>
+        <p v-else-if="externalError" class="error">{{ externalError }}</p>
 
         <p class="hint">
             Vous avez déjà un compte ?
@@ -197,6 +204,7 @@ import { ref } from "vue";
 import { useAuth } from "~/composables/useAuth";
 
 type UserType = "pro" | "part";
+
 interface ProForm {
     company: string;
     username: string;
@@ -212,9 +220,24 @@ interface PartForm {
     username: string;
     email: string;
     password: string;
-    phoneNumber: string;
+    phoneNumber: string | number | null;
 }
-const { register, loading, error } = useAuth();
+
+interface RegisterInterface {
+    username?: string;
+    email?: string;
+    password?: string;
+    phoneNumber?: string | number | null;
+    address_id?: number | null;
+    tax_id?: number | null;
+    bank_account?: string;
+    bank_account_bic?: string;
+    image?: string;
+    // allow extra fields (company, fullname...) to be sent if needed by backend
+    [key: string]: any;
+}
+
+const { registerClient, registerSeller } = useAuth();
 
 const userType = ref<UserType>("part");
 
@@ -229,33 +252,98 @@ const pro = ref<ProForm>({
 const part = ref<PartForm>({
     fullname: "",
     firstname: "",
+    username: "",
     email: "",
     password: "",
-    phoneNumber: "",
+    phoneNumber: null,
 });
 
-const onSubmit = async () => {
-    const payload =
-        userType.value === "pro"
-            ? { type: "pro", ...pro.value }
-            : { type: "part", ...part.value };
-    // Validation minimale côté client (évite envoi vide)
-    if (
-        userType.value === "pro" &&
-        (!pro.value.company || !pro.value.email || !pro.value.password)
-    )
-        return;
-    if (
-        userType.value === "part" &&
-        (!part.value.fullname ||
-            !part.value.firstname ||
-            !part.value.email ||
-            !part.value.password)
-    )
-        return;
+const loading = ref(false);
+const localError = ref("");
+const externalError = ref("");
 
-    await register(payload as any); // typé dans useAuth
-    await navigateTo("/auth/login");
+const onSubmit = async () => {
+    // reset errors
+    localError.value = "";
+    externalError.value = "";
+
+    // minimal client-side validation
+    if (userType.value === "pro") {
+        if (
+            !pro.value.company ||
+            !pro.value.username ||
+            !pro.value.email ||
+            !pro.value.password
+        ) {
+            localError.value =
+                "Veuillez renseigner le nom de société, username, email et mot de passe.";
+            return;
+        }
+    } else {
+        if (
+            !part.value.fullname ||
+            !part.value.firstname ||
+            !part.value.username ||
+            !part.value.email ||
+            !part.value.password
+        ) {
+            localError.value =
+                "Veuillez renseigner votre nom, prénom, username, email et mot de passe.";
+            return;
+        }
+    }
+
+    // Build payload expected by backend (RegisterInterface)
+    const commonPayload: RegisterInterface = {
+        username:
+            userType.value === "pro" ? pro.value.username : part.value.username,
+        email: userType.value === "pro" ? pro.value.email : part.value.email,
+        password:
+            userType.value === "pro" ? pro.value.password : part.value.password,
+        phoneNumber: userType.value === "pro" ? null : part.value.phoneNumber,
+        address_id: null,
+    };
+
+    // Add role-specific fields
+    if (userType.value === "pro") {
+        // Map siret to tax_id (common backend field), include company name
+        (commonPayload as any).tax_id = pro.value.siret ?? null;
+        (commonPayload as any).company = pro.value.company;
+        if (pro.value.vat) (commonPayload as any).vat = pro.value.vat;
+    } else {
+        // include fullname/firstname for client
+        (commonPayload as any).fullname = part.value.fullname;
+        (commonPayload as any).firstname = part.value.firstname;
+    }
+
+    loading.value = true;
+    try {
+        let res;
+        if (userType.value === "pro") {
+            res = await registerSeller(commonPayload);
+        } else {
+            res = await registerClient(commonPayload);
+        }
+        // If backend returns an error structure, surface it
+        if (!res || (res && (res.error || res.errors))) {
+            externalError.value =
+                (res && (res.error || JSON.stringify(res.errors))) ||
+                "Erreur lors de l'inscription.";
+            loading.value = false;
+            return;
+        }
+
+        // registration successful, navigate to login
+        // Nuxt provides a global `navigateTo`
+        await navigateTo("/auth/login");
+    } catch (err: any) {
+        // capture thrown errors (network, unexpected)
+        externalError.value =
+            (err && (err.message || JSON.stringify(err))) ||
+            "Une erreur est survenue lors de l'inscription.";
+    } finally {
+        loading.value = false;
+    }
 };
 </script>
 
