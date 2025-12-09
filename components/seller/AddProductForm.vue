@@ -107,10 +107,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useCategoryStore } from "~/stores/useCategoryStore";
-import { useClientPostFormData } from "~/services/api";
-import { storeToRefs } from "pinia";
+import { useClientPostFormData, useClientPost } from "~/services/api";
 
 const product = ref({
     name: "",
@@ -118,7 +117,7 @@ const product = ref({
     quantity: 0,
     price: 0,
     category: null,
-    file: null,
+    file: null as File | null,
 });
 
 const categoryStore = useCategoryStore();
@@ -126,7 +125,7 @@ const loading = ref(false);
 const error = ref("");
 const success = ref("");
 const selectedFileName = ref("");
-const fileInput = ref();
+const fileInput = ref<HTMLInputElement | null>(null);
 const categoryOptions = computed(() => {
     return categoryStore.categories.map((cat) => ({
         label: cat.name,
@@ -134,8 +133,10 @@ const categoryOptions = computed(() => {
     }));
 });
 
-const handleFileChange = (event) => {
-    const file = event.target.files?.[0];
+const handleFileChange = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const file = target?.files?.[0] ?? null;
+    product.value.file = file;
     if (file) {
         selectedFileName.value = file.name;
     } else {
@@ -144,8 +145,91 @@ const handleFileChange = (event) => {
 };
 
 const onSubmit = async () => {
-    console.log(product.value);
-    await useClientPostFormData("/product/create", product.value);
+    loading.value = true;
+    error.value = "";
+    success.value = "";
+
+    try {
+        const payload: any = {
+            name: product.value.name,
+            description: product.value.description,
+            price: Number(product.value.price),
+            quantity: Number(product.value.quantity),
+        };
+
+        if (
+            product.value.category !== null &&
+            product.value.category !== undefined
+        ) {
+            payload.categories_id = [Number(product.value.category)];
+        }
+
+        const res = await useClientPost("/product/create", payload);
+        if (res.error || !res.data) {
+            throw (
+                res.error || new Error("Erreur lors de la création du produit")
+            );
+        }
+
+        const createdProduct =
+            (res.data as any).product ||
+            (res.data as any).data?.product ||
+            res.data;
+        const productId = createdProduct?.id;
+
+        if (!productId) {
+            success.value =
+                "Produit créé mais impossible de récupérer l'ID depuis la réponse.";
+        } else {
+            if (product.value.file) {
+                const formData = new FormData();
+                formData.append("file", product.value.file);
+
+                const uploadRes = await useClientPostFormData(
+                    `/product/${productId}/images`,
+                    formData,
+                );
+                if (uploadRes.error) {
+                    error.value =
+                        "Produit créé, mais l'upload de l'image a échoué.";
+                    console.error("Image upload failed:", uploadRes.error);
+                } else {
+                    success.value = "Produit et image ajoutés avec succès.";
+                }
+            } else {
+                success.value = "Produit ajouté avec succès.";
+            }
+        }
+        product.value = {
+            name: "",
+            description: "",
+            quantity: 0,
+            price: 0,
+            category: null,
+            file: null,
+        };
+        selectedFileName.value = "";
+        if (fileInput.value) fileInput.value.value = "";
+    } catch (err: any) {
+        error.value =
+            err?.message || String(err) || "Erreur lors de l'ajout du produit";
+        console.error("Add product error:", err);
+    } finally {
+        loading.value = false;
+    }
+};
+
+const resetForm = () => {
+    product.value = {
+        name: "",
+        description: "",
+        quantity: 0,
+        price: 0,
+        category: null,
+        file: null,
+    };
+    selectedFileName.value = "";
+    if (fileInput.value) fileInput.value.value = "";
 };
 
 onMounted(async () => {
@@ -153,10 +237,10 @@ onMounted(async () => {
         if (categoryStore.categories.length <= 0) {
             await categoryStore.loadCategoryList();
         }
-    } catch (error) {
+    } catch (err) {
         console.error(
             "Error while trying to mount the categories of the component AddProductForm",
-            error,
+            err,
         );
     }
 });
