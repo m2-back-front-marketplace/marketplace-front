@@ -38,6 +38,14 @@ yarn dev
 bun run dev
 ```
 
+## Pourquoi ça n'a pas dutout réussi
+
+- Pas de ci de test 
+- Trop de code IA spaghetti non fonctionnele / accepter pour pouvoir montrer quelque chose
+- Des merges à l'aveugle 
+- 0 vision sur les objectifs
+- Développement par feature et non front/back
+
 ## Production
 
 Build the application for production:
