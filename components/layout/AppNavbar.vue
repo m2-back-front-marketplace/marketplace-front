@@ -3,7 +3,7 @@
         <Menubar :model="items" class="!justify-between px-6">
             <template #start>
                 <NuxtLink to="/products" class="flex items-center gap-2">
-                    <img :src="logo" alt="EGARKETPLACE" class="h-10 w-auto" />
+                    <img :src="logo" alt="ARKETPLACE" class="h-10 w-auto" />
                 </NuxtLink>
             </template>
 
