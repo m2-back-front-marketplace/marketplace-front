@@ -1,0 +1,218 @@
+.product-form {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 2rem;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow:
+      0 20px 40px rgba(15, 23, 42, 0.06),
+      0 1px 2px rgba(15, 23, 42, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .product-form__header h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.25rem;
+  }
+  
+  .product-form__subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+  
+  .product-form__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  
+  .field label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #111827;
+  }
+  
+  .field input,
+  .field textarea {
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease,
+      background-color 0.15s ease;
+  }
+  
+  .field textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  .field input:focus,
+  .field textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
+    background: #ffffff;
+  }
+  
+  .field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .field select {
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease,
+      background-color 0.15s ease;
+  }
+  
+  .field select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
+    background: #ffffff;
+  }
+  
+  
+  @media (max-width: 640px) {
+    .product-form {
+      padding: 1.5rem 1.25rem 1.5rem;
+      border-radius: 16px;
+    }
+  
+    .field-row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  
+  .upload-area {
+    border-radius: 1rem;
+    border: 1px dashed #d1d5db;
+    background: #f9fafb;
+    padding: 1.75rem 1.25rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .upload-area__title {
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .upload-area__subtitle {
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+  
+  .upload-area__button {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    border: none;
+    background: #e5e7eb;
+    color: #111827;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+  }
+  
+  .upload-area__button:hover {
+    background: #d1d5db;
+  }
+  
+  .upload-area__button:active {
+    transform: scale(0.98);
+  }
+  
+  .upload-area__input {
+    display: none;
+  }
+  
+  .upload-area__list {
+    margin-top: 0.75rem;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #4b5563;
+  }
+  
+  .upload-area__list li + li {
+    margin-top: 0.25rem;
+  }
+  
+  .product-form__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  
+  .btn {
+    border-radius: 999px;
+    padding: 0.65rem 1.3rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease,
+      box-shadow 0.15s ease;
+  }
+  
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+    box-shadow: none;
+  }
+  
+  .btn--ghost {
+    background: #f3f4f6;
+    color: #111827;
+  }
+  
+  .btn--ghost:hover:not(:disabled) {
+    background: #e5e7eb;
+  }
+  
+  .btn--primary {
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+  }
+  
+  .btn--primary:hover:not(:disabled) {
+    background: #1d4ed8;
+  }
+  
+  .btn--primary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+  }
+  
+  .product-form__error {
+    margin-top: -0.5rem;
+    color: #b91c1c;
+    font-size: 0.9rem;
+  }
+  
