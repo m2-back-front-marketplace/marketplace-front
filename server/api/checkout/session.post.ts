@@ -4,7 +4,6 @@ import { readBody } from "h3";
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const stripeSecret = config.stripeSecret as string | undefined;
-  console.log(stripeSecret, "aaaaaaaa");
   const publishable = (config.public &&
     (config.public as any).stripePublishable) as string | undefined;
 
