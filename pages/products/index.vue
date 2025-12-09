@@ -1,57 +1,55 @@
 <template>
-  <div class="test-products-page">
-    <div class="container">
-      <h1>Test des Produits (SSR)</h1>
+  <div>
+    <AppNavbar />
+    <div class="test-products-page">
+      <div class="container">
+        <h1>Test des Produits (SSR)</h1>
 
-      <!-- État de chargement -->
-      <div v-if="pending" class="loading">
-        <p>Chargement des produits...</p>
-        <div class="skeleton-grid">
-          <div v-for="i in 6" :key="i" class="skeleton-card"></div>
-        </div>
-      </div>
-
-      <!-- État d'erreur -->
-      <div v-else-if="error" class="error">
-        <h2>Erreur de chargement</h2>
-        <p>{{ error }}</p>
-        <button @click="refresh()">Réessayer</button>
-      </div>
-
-      <!-- Liste des produits -->
-      <div v-else class="products-container">
-        <p>{{ data?.length || 0 }} produits trouvés</p>
-
-        <div v-if="data && data.length > 0" class="products-grid">
-          <ProductCard
-            v-for="product in data"
-            :key="product.id"
-            :product="product"
-            @click="handleProductClick"
-            @add-to-cart="handleAddToCart"
-          />
+        <div v-if="pending" class="loading">
+          <p>Chargement des produits...</p>
+          <div class="skeleton-grid">
+            <div v-for="i in 6" :key="i" class="skeleton-card"></div>
+          </div>
         </div>
 
-        <div v-else class="no-products">
-          <p>Aucun produit disponible</p>
+        <div v-else-if="error" class="error">
+          <h2>Erreur de chargement</h2>
+          <p>{{ error }}</p>
+          <button @click="refresh()">Réessayer</button>
         </div>
-      </div>
 
-      <!-- Debug info -->
-      <details class="debug-info">
-        <summary>Debug Info</summary>
-        <pre>{{ { products: data?.slice(0, 2), pending, error } }}</pre>
-      </details>
+        <div v-else class="products-container">
+          <p>{{ data?.length || 0 }} produits trouvés</p>
+
+          <div v-if="data && data.length > 0" class="products-grid">
+            <ProductCard
+              v-for="product in data"
+              :key="product.id"
+              :product="product"
+              @click="handleProductClick"
+              @add-to-cart="handleAddToCart"
+            />
+          </div>
+
+          <div v-else class="no-products">
+            <p>Aucun produit disponible</p>
+          </div>
+        </div>
+
+        <details class="debug-info">
+          <summary>Debug Info</summary>
+          <pre>{{ { products: data?.slice(0, 2), pending, error } }}</pre>
+        </details>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-// Configuration de l'API
+import AppNavbar from '~/components/layout/AppNavbar.vue'
 const config = useRuntimeConfig();
 const baseURL = config.public.apiBase || "http://localhost:8000/api";
 
-// Chargement direct avec useFetch
 const { data, error, pending, refresh } = await useFetch('/product/getAllProducts', {
   baseURL,
   key: 'all-products',
@@ -59,7 +57,6 @@ const { data, error, pending, refresh } = await useFetch('/product/getAllProduct
   default: () => []
 });
 
-// Gestion des événements
 const handleProductClick = (product) => {
   console.log('Produit cliqué:', product.name);
 };
@@ -68,9 +65,8 @@ const handleAddToCart = (product, quantity) => {
   console.log(`Ajout au panier: ${quantity}x ${product.name}`);
 };
 
-// Meta pour la page
 useHead({
-  title: 'Test Produits - SSR'
+  title: 'Products'
 });
 </script>
 
