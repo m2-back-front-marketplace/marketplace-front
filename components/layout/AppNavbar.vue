@@ -40,7 +40,7 @@
       <!-- Avatar et panier à droite -->
       <template #end>
         <div class="navbar-actions">
-          <NuxtLink to="/panier" class="cart-link">
+          <NuxtLink to="/cart" class="cart-link">
             <i class="pi pi-shopping-cart cart-icon"></i>
             <Badge v-if="cartItemCount > 0" :value="cartItemCount" severity="danger" class="cart-badge" />
           </NuxtLink>
@@ -107,8 +107,8 @@ const items = computed(() => [
     }))
   },
   { 
-    label: 'Promotions', 
-    to: '/promotions',
+    label: 'Ajouter un produit', 
+    to: '/seller/add/add-product',
     icon: null
   },
   { 
