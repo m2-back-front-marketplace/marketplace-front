@@ -1,5 +1,10 @@
 <template>
-  <span> fix </span>
 </template>
 
-<script setup></script>
+<script setup>
+definePageMeta({
+  middleware: () => {
+    return navigateTo('/products')
+  }
+})
+</script>
