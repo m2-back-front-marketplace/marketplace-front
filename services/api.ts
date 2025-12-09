@@ -27,14 +27,9 @@ export const useAuthToken = () => {
     token.value = newToken;
   };
 
-  const clearToken = () => {
-    token.value = null;
-  };
-
   return {
     token,
     setToken,
-    clearToken,
   };
 };
 
@@ -61,7 +56,7 @@ export const useApi = <T = unknown>(
       if (response.status === 401) {
         const { clearToken } = useAuthToken();
         clearToken();
-        router.push("/login");
+        router.push("/auth/login");
       }
     },
 
@@ -101,7 +96,7 @@ const handleClientError = async (error: any) => {
   if (error.status === 401) {
     const { clearToken } = useAuthToken();
     clearToken();
-    await navigateTo("/login");
+    await navigateTo("/auth/login");
   }
   throw error;
 };
@@ -110,7 +105,7 @@ const handleClientError = async (error: any) => {
 export const useClientPost = async <T = unknown>(
   url: string,
   body?: any,
-  options: { headers?: Record<string, string> } = {}
+  options: { headers?: Record<string, string> } = {},
 ) => {
   const { baseURL } = useApiConfig();
 
@@ -136,7 +131,7 @@ export const useClientPost = async <T = unknown>(
 export const useClientPut = async <T = unknown>(
   url: string,
   body?: any,
-  options: { headers?: Record<string, string> } = {}
+  options: { headers?: Record<string, string> } = {},
 ) => {
   const { baseURL } = useApiConfig();
 
@@ -161,7 +156,7 @@ export const useClientPut = async <T = unknown>(
 // Client DELETE
 export const useClientDelete = async <T = unknown>(
   url: string,
-  options: { headers?: Record<string, string> } = {}
+  options: { headers?: Record<string, string> } = {},
 ) => {
   const { baseURL } = useApiConfig();
 
@@ -184,7 +179,7 @@ export const useClientDelete = async <T = unknown>(
 
 export const useClientPostFormData = async <T = unknown>(
   url: string,
-  formData: FormData
+  formData: FormData,
 ) => {
   const { baseURL } = useApiConfig();
   const { token } = useAuthToken();
@@ -206,9 +201,7 @@ export const useClientPostFormData = async <T = unknown>(
   }
 };
 
-export const useClientGet = async <T = unknown>(
-  url: string,
-) => {
+export const useClientGet = async <T = unknown>(url: string) => {
   const { baseURL } = useApiConfig();
   const { token } = useAuthToken();
 
