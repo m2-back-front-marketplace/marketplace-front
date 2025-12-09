@@ -153,7 +153,7 @@
                             </button>
 
                             <NuxtLink
-                                to="/"
+                                to="/products"
                                 class="block text-center text-sm text-gray-600 hover:underline"
                             >
                                 Continuer mes achats

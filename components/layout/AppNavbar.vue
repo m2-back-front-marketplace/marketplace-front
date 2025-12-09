@@ -55,7 +55,7 @@ import { useNavbar } from "~/composables/useNavbar";
 const { categories } = useNavbar();
 
 const items = computed(() => [
-    { label: "Accueil", to: "/" },
+    { label: "Accueil", to: "/products" },
 
     {
         label: "Catégories",
