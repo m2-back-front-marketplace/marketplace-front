@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import ProductForm from "~/components/form/ProductForm.vue";
+import AddProductForm from "~/components/seller/AddProductForm.vue";
 
 async function onCreate(payload) {
   // Exemple: envoi à ton API
