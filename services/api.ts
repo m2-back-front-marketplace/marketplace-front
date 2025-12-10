@@ -27,9 +27,14 @@ export const useAuthToken = () => {
     token.value = newToken;
   };
 
+  const clearToken = () => {
+    token.value = null;
+  };
+
   return {
     token,
     setToken,
+    clearToken,
   };
 };
 
