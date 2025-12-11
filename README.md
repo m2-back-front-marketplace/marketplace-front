@@ -1,3 +1,11 @@
+Lien Rendu :
+
+Site : https://marketplace-front-ctik.onrender.com/auth/register
+Doc API : https://marketplace-main-api.onrender.com/documentation
+
+Si un service ne marche pas attendre 30s qu'il démarre , si ca ne marche toujours pas envoyer un mail : remy.berjonneau@ynov.com
+
+
 # Nuxt Minimal Starter
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
